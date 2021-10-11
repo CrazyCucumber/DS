@@ -1,6 +1,8 @@
 import telebot
-from functions_student import registration
+
+from functions_student import registration, DatabaseEntry
 from functions_teacher import data_check
+
 from config import TOKEN
 bot = telebot.TeleBot(TOKEN)
 
@@ -17,15 +19,16 @@ def start_message(message):
 @bot.message_handler(content_types=['text'])
 def send_text(message):
     if message.text == 'Студент':
-        msg = bot.send_message(message.chat.id, f'{message.from_user.first_name}, пришли мне свой ID и ссылку на github'
-                                                f'\nID и ссылку на github раздели запятой'
-                                                f'\nВ ID укажи ФИО')
+        msg = bot.send_message(message.chat.id, f'{message.from_user.first_name}, пришли мне ФИО, номер группы,\n'
+                                                f'номер задания, номер варианта и ссылку на гитхаб в таком виде:\n'
+                                                f'Иванов Иван Иванович, 312Б, 3, 4, git_ref')
         bot.register_next_step_handler(msg, student_register)
     elif message.text == 'Преподаватель':
         msg = bot.send_message(message.chat.id, f'{message.from_user.first_name}, список тех, кто прикрепился: \n')
         bot.register_next_step_handler(msg, teacher_next_step)
 def student_register(message):
     registration(message)
+    DatabaseEntry(message)
 def teacher_next_step(message):
     data_check(message)
 

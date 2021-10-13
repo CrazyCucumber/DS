@@ -31,7 +31,7 @@ def student_register(message):
     DatabaseEntry(message)
 def teacher_next_step(message):
     if message.text == '1':
-        data_check(messge)
+        data_check(message)
 
 
 
